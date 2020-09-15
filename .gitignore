@@ -12,3 +12,6 @@ sessionInfoLog
 *.code-workspace
 doc
 Meta
+
+# Mac files
+.DS_Store

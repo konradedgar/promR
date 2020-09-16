@@ -23,7 +23,7 @@ Useful links:
 Authors:
 \itemize{
   \item Tyler Littlefield \email{tylurp1@gmail.com}
-  \item Konrad Zdeb \email{konrad.zdeb@me.com} (0000-0002-4497-5681)
+  \item Konrad Zdeb \email{konrad.zdeb@me.com} (\href{https://orcid.org/0000-0002-4497-5681}{ORCID})
 }
 
 }

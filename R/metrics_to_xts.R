@@ -7,7 +7,9 @@
 #' @details The function assumes that the passed object conforms to the raw
 #'   Prometheus metric object
 #'
-#' @param metric_object A data frame returned by Prometheus query
+#' @param metricsRaw Raw instant or range query metrics object
+#'
+#' @rdname metrics_conversions
 #'
 #' @return An xts object
 #' @internal
@@ -24,6 +26,6 @@
 #'                                  end = as.numeric(as.POSIXct(Sys.time())), step = "10s",
 #'                                  format = "xts")
 #' }
-metric_to_xts <- function(metric_object) {
+metric_to_xts <- function(metricsRaw) {
   1
 }

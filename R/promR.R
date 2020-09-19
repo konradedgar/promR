@@ -22,6 +22,7 @@ Prometheus <-
 #' @param query The PromQL query
 #' @param time Evaluation timestamp, can be a rfc3339 or Unix timestamp. Optional, defaults to current Prometheus server time.
 #' @param timeout Evaluation timeout (e.g. 1h, 1.5m or 15s). Optional, defaults to timeout value of the Prometheus server.
+#' @param output Desired format of the resulting data, raw will return list with query results for \code{"raw"}, \code{\link[xts]{xts}} for \code{"xts"} and \code{\link[base]{data.frame}} for \code{"df"}.
 #' @examples
 #' \dontrun{
 #'  prom <- Prometheus$new(host = "https://foo.bar", port = 9090)
@@ -31,7 +32,8 @@ Prometheus <-
 Prometheus$methods(
   query = function(query,
                    time = NULL,
-                   timeout = NULL) {
+                   timeout = NULL,
+                   output = c("raw", "df", "xts")) {
     'Run an instant query
     '
     params <- list(query = query)
@@ -47,21 +49,43 @@ Prometheus$methods(
     } else {
       params <- c(params, timeout = parse_timeout(timeout))
     }
-    r <- httr::GET(paste0(c(host, ":", port, "/api/v1/query"), collapse = ""),
+    r <-
+      httr::GET(paste0(c(host, ":", port, "/api/v1/query"), collapse = ""),
                 query = params)
 
     # Check for particular status codes in response
     response_check(r)
     metricsRaw <- jsonlite::fromJSON(httr::content(r, as = "text",
                                                    encoding = "utf-8"))
-    metrics <- data.frame(metricsRaw$data$result$metric)
-    metrics_check(metrics)
-    for (row in 1:nrow(metrics)) {
-      metrics$timestamp[[row]] <- metricsRaw$data$result$value[[row]][1]
-      metrics$value[[row]] <- metricsRaw$data$result$value[[row]][2]
+
+    # Check what is the desired format to be returned
+    if (missing(output)) {
+      output <- "df" # Default
     }
-    metrics <- format_metrics_instant_data(metrics)
-    return(metrics)
+    output <- match.arg(output)
+    # Run correct formatting function depending on desired outpt
+    switch(output,
+           raw = {
+             metricsRaw
+           },
+           df = {
+             metrics <- data.frame(metricsRaw$data$result$metric)
+             metrics_check(metrics)
+             for (row in 1:nrow(metrics)) {
+               metrics$timestamp[[row]] <- metricsRaw$data$result$value[[row]][1]
+               metrics$value[[row]] <-
+                 metricsRaw$data$result$value[[row]][2]
+             }
+             metrics <-
+               format_metrics_instant_data(metrics)
+           },
+           xts = {
+             # XTS conversion happens here
+             data(sample_matrix)
+             sample.xts <-
+               as.xts(sample_matrix, descr = 'my new xts object')
+
+           })
   }
 )
 
@@ -129,20 +153,23 @@ Prometheus$methods(
 #' metadata <- prom$metadataQuery(match_target = '{job=~"..*"}', metric = 'go_goroutines')
 #' }
 Prometheus$methods(
-  metadataQuery = function(match_target, metric = NULL, limit = NULL) {
-    params <- list(
-      match_target = match_target,
-      metric = metric,
-      limit = limit
-    )
+  metadataQuery = function(match_target,
+                           metric = NULL,
+                           limit = NULL) {
+    params <- list(match_target = match_target,
+                   metric = metric,
+                   limit = limit)
     r <-
-      httr::GET(paste0(c(host, ":", port, "/api/v1/targets/metadata"), collapse = ""),
-                query = params)
+      httr::GET(paste0(c(
+        host, ":", port, "/api/v1/targets/metadata"
+      ), collapse = ""),
+      query = params)
 
     # Check for particular status codes in response
     response_check(r)
 
-    target_metadata <- jsonlite::fromJSON(httr::content(r, as = "text", encoding = "utf-8"), flatten = TRUE)
+    target_metadata <-
+      jsonlite::fromJSON(httr::content(r, as = "text", encoding = "utf-8"), flatten = TRUE)
     metadata <- format_metadata(target_metadata$data)
     return(metadata)
   }

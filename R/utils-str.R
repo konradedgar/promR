@@ -15,6 +15,7 @@ NULL
 #'     \item Removes special characters from all columns
 #'   }
 #' @rdname string-utilities
+#' @keywords internal
 rename_metadata_data_frame <- function(x) {
   # For columns of known messy values provide replacements
   clean_names <- do.call(what = 'gsub',
@@ -58,4 +59,28 @@ destring <- function(x) {
       }
     }
   )
+}
+
+#' @section Utility function cleaning column names:
+#'   As there is no clarity with respect to the returned columns the function:
+#'   \itemize{
+#'     \item Changes names of known columns like \code{name}
+#'     \item Removes special characters from all columns
+#'   }
+#' @rdname utilities
+rename_metrics_data_frame <- function(x) {
+  x_names <- names(x)
+  if (is.null(x_names)) {
+    return(x)
+  }
+  # For columns of known messy values provide replacements
+  clean_names <- do.call(what = 'gsub',
+                         args = list(
+                           x = x_names,
+                           pattern = c(".*name.*"),
+                           replacement = c("name")
+                         ))
+  # Set names on X
+  x <- setNames(object = x, nm = clean_names)
+  return(x)
 }

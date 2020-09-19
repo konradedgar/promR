@@ -21,7 +21,7 @@ Reference Class to interface with a Prometheus Server
 \section{Methods}{
 
 \describe{
-\item{\code{query(query, time = NULL, timeout = NULL)}}{Run an instant query}
+\item{\code{query(query, time = NULL, timeout = NULL, output = c("raw", "df", "xts"))}}{Run an instant query}
 
 \item{\code{rangeQuery(query, start, end, step, timeout = NULL)}}{Query data for a specific range}
 }}

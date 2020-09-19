@@ -34,3 +34,4 @@ String formatting functions
   function ensures that those are returned as of \code{numeric} type.
 }
 
+\keyword{internal}

@@ -10,7 +10,7 @@
 #' @param metricsRaw Raw instant or range query metrics object
 #'
 #' @return An xts object
-#' @internal
+#' @keyword internal
 #'
 #' @examples
 #' \dontrun{
@@ -25,5 +25,6 @@
 #'                                  format = "xts")
 #' }
 metric_to_xts <- function(metricsRaw) {
+  # Formatting to xts takes place here
   1
 }

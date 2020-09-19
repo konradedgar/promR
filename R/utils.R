@@ -2,6 +2,7 @@
 #' @description Utility functions, usually called within the package and not
 #'   exported.
 #'
+#' @rdname utilities
 #' @name utilities
 NULL
 #> NULL

@@ -52,8 +52,8 @@ Prometheus$methods(
 
     # Check for particular status codes in response
     response_check(r)
-    metricsRaw <-
-      jsonlite::fromJSON(httr::content(r, as = "text", encoding = "utf-8"))
+    metricsRaw <- jsonlite::fromJSON(httr::content(r, as = "text",
+                                                   encoding = "utf-8"))
     metrics <- data.frame(metricsRaw$data$result$metric)
     metrics_check(metrics)
     for (row in 1:nrow(metrics)) {

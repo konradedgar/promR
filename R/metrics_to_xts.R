@@ -9,8 +9,6 @@
 #'
 #' @param metricsRaw Raw instant or range query metrics object
 #'
-#' @rdname metrics_conversions
-#'
 #' @return An xts object
 #' @internal
 #'

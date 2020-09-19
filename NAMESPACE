@@ -2,7 +2,6 @@
 
 export(Prometheus)
 exportClasses(Prometheus)
-exportClasses(promMetric)
 importFrom(cli,cat_line)
 importFrom(cli,cli_h1)
 importFrom(cli,style_bold)

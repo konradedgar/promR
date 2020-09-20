@@ -24,7 +24,7 @@
 #'                                  end = as.numeric(as.POSIXct(Sys.time())), step = "10s",
 #'                                  format = "xts")
 #' }
-metric_to_xts <- function(metricsRaw) {
-  # Formatting to xts takes place here
-  1
+metrics_to_xts <- function(metricsRaw) {
+  # Check if received metricsRaw object
+  checkmate::assert_list(x = metricsRaw, names = "strict")
 }

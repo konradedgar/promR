@@ -103,8 +103,8 @@ Prometheus$methods(
 #' rangeMetrics <-
 #'  prom$rangeQuery(
 #'    query = "up",
-#'    start = "2018-10-25T20:10:51.781Z",
-#'    end = "2018-10-26T20:10:51.781Z",
+#'    start = as.numeric(Sys.time() - 100),
+#'    end = as.numeric(Sys.time()),
 #'    step = "15s"
 #'  )
 #' }

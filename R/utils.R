@@ -52,3 +52,16 @@ metrics_check <- function(metric) {
     }
   )
 }
+
+#' @section Check Metrics Object Type:
+#'   Check if returned metrics raw object is of type range or instant.
+#' @param metricsRaw Raw metrics object
+#' @rdname utilities
+#' @keywords internal
+metrics_type_check <- function(metricsRaw) {
+  checkmate::assert_list(metricsRaw, names = "strict", len = 2)
+  switch(metricsRaw$data$resultType,
+         matrix = "range",
+         vector = "instant")
+
+}

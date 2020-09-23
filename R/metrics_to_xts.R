@@ -25,6 +25,24 @@
 #'                                  format = "xts")
 #' }
 metrics_to_xts <- function(metricsRaw) {
+
+  # Define conversion function to arrive at xts object
+  range_to_xts <- function(metricsRaw) {
+
+  }
+
+  instant_to_xts <- function(metricsRaw) {
+
+  }
+
   # Check if received metricsRaw object
-  checkmate::assert_list(x = metricsRaw, names = "strict")
+  checkmate::assert_list(x = metricsRaw, names = "strict", len = 2)
+
+  # Assert metrics type to decide on xts conversion method
+  metrics_type <- metrics_type_check(metricsRaw)
+
+  # Deploy desired conversion function
+  switch(metrics_type,
+         range = range_to_xts(metricsRaw),
+         instant = instant_to_xts(metricsRaw))
 }

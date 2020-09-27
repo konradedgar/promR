@@ -27,8 +27,18 @@
 metrics_to_xts <- function(metricsRaw) {
 
   # Define conversion function to arrive at xts object
-  range_to_xts <- function(metricsRaw) {
+  range_to_xts <- function(x) {
 
+    Metrics_values <- lapply(x$data$result$values, function(x) as.double(x[, 2]))
+    Metrics_values <- do.call("cbind", Metrics_values)
+
+    Metrics_timestamps <- as.double(x$data$result$values[[1]][, 1])
+
+    metrics_labels <- x$data$result$metric$job
+    colnames(Metrics_values) <- c(metrics_labels)
+
+    xts::as.xts(x = Metrics_values,
+                order.by = as.POSIXct(Metrics_timestamps, origin = "1970-01-01"))
   }
 
   instant_to_xts <- function(metricsRaw) {
@@ -43,6 +53,6 @@ metrics_to_xts <- function(metricsRaw) {
 
   # Deploy desired conversion function
   switch(metrics_type,
-         range = range_to_xts(metricsRaw),
+         range = range_to_xts(x = metricsRaw),
          instant = instant_to_xts(metricsRaw))
 }
